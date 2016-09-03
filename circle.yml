@@ -26,5 +26,5 @@ deployment:
   build:
     branch: build
     commands:
-      - docker build Dockerfile.build -t build-fractals-generator .
+      - docker build -f Dockerfile.build -t build-fractals-generator .
       - docker run build-fractals-generator -e GITHUB_OAUTH_TOKEN=$GITHUB_OAUTH_TOKEN
