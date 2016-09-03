@@ -55,7 +55,16 @@ func createRelease(githubOauthToken, version string) *release {
   defer res.Body.Close()
 
   if res.StatusCode != 201 {
-    log.Fatal("Could not create a release.")
+    bs, err = ioutil.ReadAll(res.Body)
+    if err != nil {
+      log.Fatal(err)
+    }
+
+    log.Fatalf(
+      "Could not create a relase.\nResponse status: %d.\nResponse body: %s",
+      res.StatusCode,
+      string(bs),
+    )
   }
 
   d := json.NewDecoder(res.Body)
