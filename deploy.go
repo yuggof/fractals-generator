@@ -1,6 +1,7 @@
 package main
 
 import (
+  "os/exec"
   "net/http"
   "os"
   "log"
@@ -26,15 +27,25 @@ func getGithubOauthToken() string {
   return got
 }
 
-func getVersion() string {
-  return fmt.Sprintf("v%d", os.Getenv("CIRCLE_BUILD_NUM"))
+func getTagName() string {
+  tn := os.Getenv("CIRCLE_BUILD_NUM")
+
+  if tn == "" {
+    log.Fatal("CIRCLE_BUILD_NUM env variable is empty.")
+  }
+
+  return tn
 }
 
-func createRelease(githubOauthToken, version string) *release {
-  r := release{
-    TagName: fmt.Sprintf("staging-%s", version),
-    TargetCommitish: "staging-release",
+func buildBinary() {
+  err := exec.Command("go", "build", "-o", "generate-fractal", "generator.go").Run()
+  if err != nil {
+    log.Fatal(err)
   }
+}
+
+func createRelease(githubOauthToken string) *release {
+  r := release{TagName: getTagName()}
 
   bs, err := json.Marshal(r)
   if err != nil {
@@ -99,8 +110,8 @@ func uploadBinary(githubOauthToken string, release *release) {
 }
 
 func main() {
+  buildBinary()
   got := getGithubOauthToken()
-  v := getVersion()
-  r := createRelease(got, v)
+  r := createRelease(got)
   uploadBinary(got, r)
 }
