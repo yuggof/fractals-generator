@@ -1,0 +1,5 @@
+FROM golang:1.7.0
+
+COPY . .
+
+CMD ["go", "run", "deploy.go"]

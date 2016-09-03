@@ -1,0 +1,22 @@
+---
+general:
+  branches:
+    only:
+      - build
+
+machine:
+  pre:
+    - curl -sSL https://s3.amazonaws.com/circle-downloads/install-circleci-docker.sh | bash -s -- 1.10.0
+  services:
+    - docker
+
+database:
+  override:
+    - echo
+
+deployment:
+  build:
+    branch: build
+    commands:
+      - docker build Dockerfile.build -t build-fractals-generator .
+      - docker run build-fractals-generator -e GITHUB_OAUTH_TOKEN=$GITHUB_OAUTH_TOKEN
