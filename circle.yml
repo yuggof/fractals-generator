@@ -18,6 +18,10 @@ database:
   override:
     - echo
 
+test:
+  override:
+    - echo
+
 deployment:
   build:
     branch: build
