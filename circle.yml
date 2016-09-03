@@ -10,6 +10,10 @@ machine:
   services:
     - docker
 
+dependencies:
+  override:
+    - echo
+
 database:
   override:
     - echo
