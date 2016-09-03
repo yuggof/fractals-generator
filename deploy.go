@@ -7,7 +7,6 @@ import (
   "fmt"
   "encoding/json"
   "io/ioutil"
-  "strings"
   "bytes"
 )
 
@@ -28,12 +27,7 @@ func getGithubOauthToken() string {
 }
 
 func getVersion() string {
-  bs, err := ioutil.ReadFile("VERSION")
-  if err != nil {
-    log.Fatal(err)
-  }
-
-  return strings.TrimSpace(string(bs))
+  return os.Getenv("CIRCLE_BUILD_NUM")
 }
 
 func createRelease(githubOauthToken, version string) *release {
