@@ -27,6 +27,7 @@ func getGithubOauthToken() string {
 }
 
 func getVersion() string {
+  fmt.Printf("CIRCLE_BUILD_NUM = %s\n", os.Getenv("CIRCLE_BUILD_NUM"))
   return os.Getenv("CIRCLE_BUILD_NUM")
 }
 
